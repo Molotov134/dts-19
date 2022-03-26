@@ -1,0 +1,63 @@
+Router:
+En
+Conf t
+Настройка DHCP:
+Ip dhcp pool DHCP
+Network 192.168.18.0 255.255.255.0
+Default-router 192.168.18.200
+Dns-server 8.8.8.8
+Exit
+Ip dhcp excluded-address 192.168.18.200
+Ip dhcp excluded-address 192.168.18.1
+Ip dhcp excluded-address 192.168.18.100
+Настройка портов:
+Int f0/0
+No sh
+Ip address 192.168.18.200 255.255.255.0
+Exit
+Int f0/1
+Ip nat outside
+No sh
+Exit
+Настройка NAT:
+Int f0/0
+Ip nat inside
+Exit
+Ip route 0.0.0.0 0.0.0.0 192.168.16.1
+Ip  access-list standard FOR-NAT
+Permit 192.168.18.0 0.0.0.255
+Exit
+Ip nat inside source list FOR-NAT int f0/1 overlord
+Настройка telnet:
+Line vty 0 15
+Transport input all
+Login local
+Exit
+Username admin pr 15 password cisco
+Сохранение конфига:
+Do w
+
+Switch:
+Настройка Vlan:
+En
+Conf t
+Int vlan 2
+Ip address 192.168.18.100 255.255.255.0
+No sh
+Exit
+Настройкам портов:
+Int f0/1
+Sw mode access
+Sw access vlan 2
+Exit
+Настройка telnet:
+Username admin pr 15 password cisco
+Hostname S1
+Line vty 0 15
+Transport input telnet
+Login local
+Exit
+Шифровка паролей:
+Service password-enc
+Сохранение конфига:
+Do w
